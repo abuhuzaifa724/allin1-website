@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All in 1 - Your Complete News Source</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1A365D;
+    --bg: #FFFFFF;
+    --text: #333333;
+    --accent: #D32F2F;
+    --secondary-bg: #F8F9FA;
+    --border: #E0E0E0;
+    --primary-light: #2a4a7f;
+    --text-muted: #666666;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  a { text-decoration: none; color: inherit; }
+
+  /* BREAKING NEWS TICKER */
+  .ticker-bar {
+    background: var(--accent);
+    color: white;
+    padding: 7px 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+  .ticker-label {
+    background: #8B0000;
+    color: white;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    padding: 0 16px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+    text-transform: uppercase;
+  }
+  .ticker-track {
+    display: flex;
+    animation: ticker 35s linear infinite;
+    white-space: nowrap;
+    padding-left: 30px;
+  }
+  .ticker-track span {
+    font-size: 13px;
+    padding-right: 60px;
+    font-weight: 500;
+  }
+  .ticker-track span::before {
+    content: "● ";
+    opacity: 0.7;
+  }
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* TOP BAR */
+  .top-bar {
+    background: var(--secondary-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 6px 0;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .top-bar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .top-bar-right a {
+    margin-left: 14px;
+    color: var(--text-muted);
+    font-size: 12px;
+    transition: color 0.2s;
+  }
+  .top-bar-right a:hover { color: var(--primary); }
+
+  /* HEADER */
+  header {
+    background: var(--primary);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: white;
+    letter-spacing: -0.5px;
+  }
+  .logo span {
+    color: var(--accent);
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  nav a {
+    color: rgba(255,255,255,0.85);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  nav a:hover, nav a.active {
+    background: rgba(255,255,255,0.12);
+    color: white;
+  }
+  .search-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-left: 8px;
+    transition: background 0.2s;
+  }
+  .search-btn:hover { background: #b71c1c; }
+
+  /* CATEGORY STRIP */
+  .category-strip {
+    background: var(--primary-light);
+    border-bottom: 3px solid var(--accent);
+  }
+  .category-strip-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .category-strip a {
+    color: rgba(255,255,255,0.8);
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 9px 14px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+  }
+  .category-strip a:hover {
+    color: white;
+    border-bottom-color: white;
+  }
+
+  /* MAIN LAYOUT */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* FEATURED SECTION */
+  .featured-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1px;
+    background: var(--border);
+    margin-top: 24px;
+    border: 1px solid var(--border);
+  }
+  .featured-main {
+    grid-row: 1 / 3;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .featured-main img {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s;
+  }
+  .featured-main:hover img { transform: scale(1.03); }
+  .featured-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.85));
+    padding: 40px 24px 24px;
+    color: white;
+  }
+  .featured-overlay .cat-badge {
+    background: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+  .featured-overlay h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .featured-overlay p {
+    font-size: 13px;
+    opacity: 0.85;
+    line-height: 1.5;
+  }
+  .featured-side {
+    background: white;
+    padding: 18px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-bottom: 1px solid var(--border);
+  }
+  .featured-side:hover { background: var(--secondary-bg); }
+  .featured-side img {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .featured-side .cat-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .featured-side h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--text);
+  }
+  .featured-side:hover h3 { color: var(--primary); }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 32px 0 16px;
+    border-bottom: 3px solid var(--primary);
+    padding-bottom: 10px;
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .section-header .line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .section-header a {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* NEWS GRID */
+  .main-content {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 28px;
+    margin-top: 8px;
+  }
+
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .news-card {
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .news-card:hover { transform: translateY(-3px); }
+  .news-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .news-card .cat-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent);
+    margin-bottom: 5px;
+    display: block;
+  }
+  .news-card h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .news-card:hover h3 { color: var(--primary); }
+  .news-card p {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+  .news-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    gap: 10px;
+  }
+
+  /* SIDEBAR */
+  .sidebar {}
+  .trending-box {
+    background: var(--secondary-bg);
+    border: 1px solid var(--border);
+    padding: 18px;
+    margin-bottom: 24px;
+  }
+  .trending-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+  }
+  .trending-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .trending-item:last-child { border-bottom: none; }
+  .trending-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--border);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 24px;
+  }
+  .trending-item:hover .trending-num { color: var(--accent); }
+  .trending-item h4 {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--text);
+  }
+  .trending-item:hover h4 { color: var(--primary); }
+  .trending-item span {
+    font-size: 11px;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 3px;
+  }
+
+  /* AD BOX */
+  .ad-box {
+    background: var(--primary);
+    color: white;
+    padding: 24px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .ad-box p { font-size: 11px; opacity: 0.6; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .ad-box h4 { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 6px; }
+  .ad-box small { font-size: 12px; opacity: 0.7; }
+
+  /* STOCK TICKER */
+  .stock-bar {
+    background: var(--primary);
+    color: white;
+    padding: 8px 0;
+    overflow: hidden;
+    margin: 24px 0;
+    display: flex;
+    align-items: center;
+  }
+  .stock-label {
+    background: var(--accent);
+    padding: 0 14px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .stock-track {
+    display: flex;
+    animation: ticker 25s linear infinite;
+    white-space: nowrap;
+    padding-left: 20px;
+  }
+  .stock-item {
+    font-size: 12px;
+    padding-right: 40px;
+    display: flex;
+    gap: 6px;
+  }
+  .stock-item .name { font-weight: 600; }
+  .stock-item .up { color: #4CAF50; }
+  .stock-item .down { color: #FF5252; }
+
+  /* HORIZONTAL NEWS */
+  .news-list-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .news-list-item:last-child { border-bottom: none; }
+  .news-list-item img {
+    width: 100px;
+    height: 70px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .news-list-item h4 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.35;
+    margin-bottom: 5px;
+  }
+  .news-list-item:hover h4 { color: var(--primary); }
+  .news-list-item p {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--primary);
+    color: white;
+    margin-top: 40px;
+  }
+  .footer-top {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 32px;
+  }
+  .footer-brand .logo { font-size: 24px; margin-bottom: 12px; display: block; }
+  .footer-brand p { font-size: 13px; opacity: 0.7; line-height: 1.6; margin-bottom: 16px; }
+  .social-links { display: flex; gap: 10px; }
+  .social-links a {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    transition: background 0.2s;
+  }
+  .social-links a:hover { background: var(--accent); }
+  .footer-col h4 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    color: rgba(255,255,255,0.5);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 8px;
+  }
+  .footer-col a {
+    display: block;
+    color: rgba(255,255,255,0.75);
+    font-size: 13px;
+    padding: 4px 0;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: white; }
+  .footer-bottom {
+    background: rgba(0,0,0,0.2);
+    text-align: center;
+    padding: 14px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* PLACEHOLDER IMAGES */
+  .img-placeholder {
+    background: linear-gradient(135deg, #1A365D 0%, #2a4a7f 50%, #1a365d 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.3);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<!-- BREAKING NEWS TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-label">🔴 Breaking</div>
+  <div style="overflow:hidden;flex:1">
+    <div class="ticker-track">
+      <span>Global Stock Markets Rally as Inflation Data Shows Improvement</span>
+      <span>Tech Giants Announce Major AI Partnership Deal Worth $50 Billion</span>
+      <span>Sports: National Team Wins Championship After 20 Years</span>
+      <span>World Leaders Meet for Emergency Climate Summit in Geneva</span>
+      <span>New Gaming Console Breaks Pre-Order Records Worldwide</span>
+      <span>Oil Prices Drop 5% Amid Middle East Peace Talks Progress</span>
+      <span>Global Stock Markets Rally as Inflation Data Shows Improvement</span>
+      <span>Tech Giants Announce Major AI Partnership Deal Worth $50 Billion</span>
+      <span>Sports: National Team Wins Championship After 20 Years</span>
+      <span>World Leaders Meet for Emergency Climate Summit in Geneva</span>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div style="background:rgba(0,0,0,0.25);border-bottom:1px solid rgba(255,255,255,0.1)">
+    <div class="header-inner" style="height:30px">
+      <span style="font-size:12px;color:rgba(255,255,255,0.6)">Saturday, March 21, 2026</span>
+      <div style="display:flex;gap:16px">
+        <a href="#" style="font-size:12px;color:rgba(255,255,255,0.6)">E-Paper</a>
+        <a href="#" style="font-size:12px;color:rgba(255,255,255,0.6)">Newsletter</a>
+        <a href="#" style="font-size:12px;color:rgba(255,255,255,0.6)">About Us</a>
+        <a href="#" style="font-size:12px;color:rgba(255,255,255,0.6)">Contact</a>
+      </div>
+    </div>
+  </div>
+  <div class="header-inner">
+    <div class="logo">All <span>in</span> 1</div>
+    <nav>
+      <a href="#" class="active">Home</a>
+      <a href="#">Business</a>
+      <a href="#">World</a>
+      <a href="#">Sports</a>
+      <a href="#">Technology</a>
+      <a href="#">Games</a>
+      <a href="#">Stock</a>
+      <button class="search-btn">🔍 Search</button>
+    </nav>
+  </div>
+</header>
+
+<!-- CATEGORY STRIP -->
+<div class="category-strip">
+  <div class="category-strip-inner">
+    <a href="#">📰 Top Stories</a>
+    <a href="#">💼 Business</a>
+    <a href="#">🌍 World News</a>
+    <a href="#">🏏 Sports</a>
+    <a href="#">💻 Technology</a>
+    <a href="#">🎮 Games</a>
+    <a href="#">📈 Stock Market</a>
+    <a href="#">🎬 Entertainment</a>
+    <a href="#">🏥 Health</a>
+    <a href="#">🔬 Science</a>
+    <a href="#">🌤️ Weather</a>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+  <!-- FEATURED -->
+  <div class="featured-section">
+    <div class="featured-main">
+      <div class="img-placeholder" style="height:420px;font-size:14px;">📰 Featured News Image</div>
+      <div class="featured-overlay">
+        <div class="cat-badge">World News</div>
+        <h2>World Leaders Reach Historic Agreement on Global Economic Reform at G20 Summit</h2>
+        <p>In a landmark decision, heads of state from 20 major economies have signed a comprehensive framework addressing trade imbalances, digital taxation, and sustainable development goals.</p>
+      </div>
+    </div>
+    <div class="featured-side">
+      <div class="img-placeholder" style="height:130px;">📈 Stock News</div>
+      <span class="cat-badge">Stock Market</span>
+      <h3>Asian Markets Surge as Federal Reserve Signals Pause in Rate Hikes</h3>
+    </div>
+    <div class="featured-side">
+      <div class="img-placeholder" style="height:130px;">🎮 Gaming</div>
+      <span class="cat-badge">Games</span>
+      <h3>Most Anticipated Game of 2026 Breaks All Pre-Order Records in 24 Hours</h3>
+    </div>
+  </div>
+
+  <!-- STOCK TICKER -->
+  <div class="stock-bar">
+    <div class="stock-label">📈 Markets</div>
+    <div style="overflow:hidden;flex:1">
+      <div class="stock-track">
+        <div class="stock-item"><span class="name">NASDAQ</span><span class="up">▲ 15,234.56 +1.2%</span></div>
+        <div class="stock-item"><span class="name">S&P 500</span><span class="up">▲ 5,432.10 +0.8%</span></div>
+        <div class="stock-item"><span class="name">DOW</span><span class="down">▼ 38,921.45 -0.3%</span></div>
+        <div class="stock-item"><span class="name">BTC</span><span class="up">▲ $87,432 +3.1%</span></div>
+        <div class="stock-item"><span class="name">GOLD</span><span class="up">▲ $2,341 +0.5%</span></div>
+        <div class="stock-item"><span class="name">OIL</span><span class="down">▼ $74.23 -1.8%</span></div>
+        <div class="stock-item"><span class="name">NASDAQ</span><span class="up">▲ 15,234.56 +1.2%</span></div>
+        <div class="stock-item"><span class="name">S&P 500</span><span class="up">▲ 5,432.10 +0.8%</span></div>
+        <div class="stock-item"><span class="name">DOW</span><span class="down">▼ 38,921.45 -0.3%</span></div>
+        <div class="stock-item"><span class="name">BTC</span><span class="up">▲ $87,432 +3.1%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN + SIDEBAR -->
+  <div class="main-content">
+    <div>
+      <!-- TOP STORIES -->
+      <div class="section-header">
+        <h2>Top Stories</h2>
+        <div class="line"></div>
+        <a href="#">View All →</a>
+      </div>
+      <div class="news-grid">
+        <div class="news-card">
+          <div class="img-placeholder" style="height:160px;">💼 Business</div>
+          <span class="cat-badge">Business</span>
+          <h3>Global Trade Deficit Narrows as Export Numbers Hit Five-Year High</h3>
+          <p>Economic analysts say the improvement signals strong recovery in manufacturing and export sectors.</p>
+          <div class="news-meta"><span>2 hours ago</span><span>3 min read</span></div>
+        </div>
+        <div class="news-card">
+          <div class="img-placeholder" style="height:160px;">🏏 Sports</div>
+          <span class="cat-badge">Sports</span>
+          <h3>National Cricket Team Sets New World Record in Test Match History</h3>
+          <p>A stunning performance by the batting lineup led to the highest ever partnership score in test cricket.</p>
+          <div class="news-meta"><span>4 hours ago</span><span>2 min read</span></div>
+        </div>
+        <div class="news-card">
+          <div class="img-placeholder" style="height:160px;">💻 Tech</div>
+          <span class="cat-badge">Technology</span>
+          <h3>New AI Chip Outperforms All Competitors, Revolutionizing Data Centers</h3>
+          <p>The next-gen processor delivers 10x performance improvements while consuming 40% less energy.</p>
+          <div class="news-meta"><span>5 hours ago</span><span>4 min read</span></div>
+        </div>
+      </div>
+
+      <!-- BUSINESS -->
+      <div class="section-header">
+        <h2>Business</h2>
+        <div class="line"></div>
+        <a href="#">View All →</a>
+      </div>
+      <div>
+        <div class="news-list-item">
+          <div class="img-placeholder" style="width:100px;height:70px;">📊</div>
+          <div>
+            <h4>Central Bank Raises Interest Rates by 25 Basis Points Amid Inflation Concerns</h4>
+            <p>The decision was widely expected by markets, with analysts predicting one more hike before year end.</p>
+            <div class="news-meta" style="margin-top:5px"><span>1 hour ago</span></div>
+          </div>
+        </div>
+        <div class="news-list-item">
+          <div class="img-placeholder" style="width:100px;height:70px;">🏦</div>
+          <div>
+            <h4>Major Merger Between Two Leading Banks Creates Industry's Largest Financial Institution</h4>
+            <p>The $120 billion deal is set to reshape the global banking landscape with operations in 60 countries.</p>
+            <div class="news-meta" style="margin-top:5px"><span>3 hours ago</span></div>
+          </div>
+        </div>
+        <div class="news-list-item">
+          <div class="img-placeholder" style="width:100px;height:70px;">📉</div>
+          <div>
+            <h4>Startup Ecosystem Sees Record $45 Billion in Venture Capital Investment This Quarter</h4>
+            <p>AI and clean energy startups attracted the most funding as investors bet on long-term growth sectors.</p>
+            <div class="news-meta" style="margin-top:5px"><span>6 hours ago</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GAMES -->
+      <div class="section-header">
+        <h2>Games</h2>
+        <div class="line"></div>
+        <a href="#">View All →</a>
+      </div>
+      <div class="news-grid">
+        <div class="news-card">
+          <div class="img-placeholder" style="height:160px;">🎮 RPG</div>
+          <span class="cat-badge">Games</span>
+          <h3>Massive Open World RPG Announced with Revolutionary AI-Driven Storyline</h3>
+          <p>The game features a living world where every NPC has unique memory and personality.</p>
+          <div class="news-meta"><span>Today</span><span>3 min read</span></div>
+        </div>
+        <div class="news-card">
+          <div class="img-placeholder" style="height:160px;">🏆 Esports</div>
+          <span class="cat-badge">Esports</span>
+          <h3>World Championship Finals Draw 50 Million Live Viewers, Breaking All Records</h3>
+          <p>The esports industry continues to grow with viewership rivaling traditional sports events.</p>
+          <div class="news-meta"><span>Yesterday</span><span>2 min read</span></div>
+        </div>
+        <div class="news-card">
+          <div class="img-placeholder" style="height:160px;">📱 Mobile</div>
+          <span class="cat-badge">Mobile Games</span>
+          <h3>Popular Mobile Game Hits 500 Million Downloads, Sets New App Store Record</h3>
+          <p>The free-to-play title has generated over $2 billion in revenue since its launch last year.</p>
+          <div class="news-meta"><span>2 days ago</span><span>2 min read</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="trending-box">
+        <h3>🔥 Trending Now</h3>
+        <div class="trending-item">
+          <div class="trending-num">01</div>
+          <div>
+            <h4>Stock Market Hits All-Time High as Tech Stocks Surge</h4>
+            <span>📈 Stock Market • 2h ago</span>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-num">02</div>
+          <div>
+            <h4>FIFA World Cup 2026 Host Cities Announced</h4>
+            <span>🏆 Sports • 4h ago</span>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-num">03</div>
+          <div>
+            <h4>New iPhone 18 Pro Leaked: Foldable Design Confirmed</h4>
+            <span>💻 Technology • 5h ago</span>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-num">04</div>
+          <div>
+            <h4>Bitcoin Surpasses $90,000 for First Time This Year</h4>
+            <span>📈 Crypto • 6h ago</span>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-num">05</div>
+          <div>
+            <h4>Major Earthquake Strikes Pacific Region, Tsunami Warning Issued</h4>
+            <span>🌍 World News • 8h ago</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ad-box">
+        <p>Advertisement</p>
+        <h4>Subscribe to All in 1 Premium</h4>
+        <small>Ad-free experience + exclusive content</small>
+      </div>
+
+      <div class="trending-box">
+        <h3>📈 Market Watch</h3>
+        <div class="trending-item">
+          <div style="flex:1">
+            <h4 style="font-size:13px">NASDAQ Composite</h4>
+            <span style="color:#4CAF50;font-weight:600">▲ 15,234.56 +1.2%</span>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div style="flex:1">
+            <h4 style="font-size:13px">S&P 500</h4>
+            <span style="color:#4CAF50;font-weight:600">▲ 5,432.10 +0.8%</span>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div style="flex:1">
+            <h4 style="font-size:13px">Dow Jones</h4>
+            <span style="color:#FF5252;font-weight:600">▼ 38,921.45 -0.3%</span>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div style="flex:1">
+            <h4 style="font-size:13px">Bitcoin (BTC)</h4>
+            <span style="color:#4CAF50;font-weight:600">▲ $87,432 +3.1%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="logo">All <span>in</span> 1</span>
+      <p>Your one-stop destination for all the latest news — business, sports, technology, games, stock market, and everything in between.</p>
+      <div class="social-links">
+        <a href="#">f</a>
+        <a href="#">t</a>
+        <a href="#">in</a>
+        <a href="#">yt</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Categories</h4>
+      <a href="#">Business</a>
+      <a href="#">World News</a>
+      <a href="#">Sports</a>
+      <a href="#">Technology</a>
+      <a href="#">Games</a>
+      <a href="#">Stock Market</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About Us</a>
+      <a href="#">Contact</a>
+      <a href="#">Advertise</a>
+      <a href="#">Careers</a>
+      <a href="#">Newsletter</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Use</a>
+      <a href="#">Cookie Policy</a>
+      <a href="#">Disclaimer</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 All in 1. All rights reserved. | Designed with ❤️
+  </div>
+</footer>
+
+</body>
+</html>
