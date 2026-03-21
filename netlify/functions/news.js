@@ -1,21 +1,28 @@
-const NEWSDATA_KEY = 'pub_2546e64b425d418eaf206537d2ca7f77';
-const GNEWS_KEY = '0400a760de583de07200841de459ba7c';
-
 exports.handler = async (event) => {
   const { category = 'general', q = '' } = event.queryStringParameters || {};
 
   const headers = {
     'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
     'Content-Type': 'application/json'
   };
 
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 200, headers, body: '' };
+  }
+
+  const NEWSDATA_KEY = 'pub_2546e64b425d418eaf206537d2ca7f77';
+  const GNEWS_KEY = '0400a760de583de07200841de459ba7c';
+
+  const catMap = {
+    general:'top', business:'business', technology:'technology',
+    sports:'sports', entertainment:'entertainment',
+    science:'science', health:'health', world:'world'
+  };
+  const cat = catMap[category] || 'top';
+
   try {
-    let articles = [];
-
     // Try NewsData.io first
-    const catMap = { general:'top', business:'business', technology:'technology', sports:'sports', entertainment:'entertainment', science:'science', health:'health', world:'world' };
-    const cat = catMap[category] || 'top';
-
     const ndUrl = q
       ? `https://newsdata.io/api/1/news?apikey=${NEWSDATA_KEY}&language=en&q=${encodeURIComponent(q)}&size=12`
       : `https://newsdata.io/api/1/news?apikey=${NEWSDATA_KEY}&language=en&category=${cat}&size=12`;
@@ -24,7 +31,7 @@ exports.handler = async (event) => {
     const ndData = await ndRes.json();
 
     if (ndData.status === 'success' && ndData.results?.length) {
-      articles = ndData.results.filter(a => a.title).map(a => ({
+      const articles = ndData.results.filter(a => a.title).map(a => ({
         title: a.title,
         description: a.description,
         url: a.link,
@@ -32,7 +39,10 @@ exports.handler = async (event) => {
         publishedAt: a.pubDate,
         source: { name: a.source_id || 'NewsData' }
       }));
-      return { statusCode: 200, headers, body: JSON.stringify({ articles, source: 'newsdata' }) };
+      return {
+        statusCode: 200, headers,
+        body: JSON.stringify({ articles, source: 'newsdata' })
+      };
     }
 
     // Fallback to GNews
@@ -45,7 +55,7 @@ exports.handler = async (event) => {
     const gnData = await gnRes.json();
 
     if (gnData.articles?.length) {
-      articles = gnData.articles.map(a => ({
+      const articles = gnData.articles.map(a => ({
         title: a.title,
         description: a.description,
         url: a.url,
@@ -53,12 +63,21 @@ exports.handler = async (event) => {
         publishedAt: a.publishedAt,
         source: { name: a.source?.name || 'GNews' }
       }));
-      return { statusCode: 200, headers, body: JSON.stringify({ articles, source: 'gnews' }) };
+      return {
+        statusCode: 200, headers,
+        body: JSON.stringify({ articles, source: 'gnews' })
+      };
     }
 
-    return { statusCode: 200, headers, body: JSON.stringify({ articles: [], source: 'none' }) };
+    return {
+      statusCode: 200, headers,
+      body: JSON.stringify({ articles: [], source: 'none' })
+    };
 
-  } catch (e) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: e.message, articles: [] }) };
+  } catch(e) {
+    return {
+      statusCode: 500, headers,
+      body: JSON.stringify({ error: e.message, articles: [] })
+    };
   }
 };
