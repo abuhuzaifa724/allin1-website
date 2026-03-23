@@ -287,7 +287,7 @@ function cleanDesc(str){
 async function fetchRSS(category){
   try {
     var feedUrl = RSS_FEEDS[category] || RSS_FEEDS['top'];
-    var apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feedUrl) + '&count=12';
+    var apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feedUrl);
     var res = await fetch(apiUrl);
     var data = await res.json();
     if(data.status !== 'ok' || !data.items || data.items.length === 0) return [];
@@ -433,7 +433,7 @@ async function doSearch(){
 
   try {
     var searchUrl='https://news.google.com/rss/search?q='+encodeURIComponent(q)+'&hl=en-US&gl=US&ceid=US:en';
-    var apiUrl='https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(searchUrl)+'&count=9';
+   var apiUrl='https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(searchUrl);
     var res=await fetch(apiUrl);
     var data=await res.json();
     if(data.status!=='ok'||!data.items||!data.items.length){
