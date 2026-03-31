@@ -25,10 +25,9 @@ exports.handler = async function(event) {
   }
 
   var NEWSDATA_KEY = 'pub_2546e64b425d418eaf206537d2ca7f77';
-  var url = q
-    ? 'https://newsdata.io/api/1/news?apikey=' + NEWSDATA_KEY + '&language=en&q=' + encodeURIComponent(q) + '&size=12'
-    : 'https://newsdata.io/api/1/news?apikey=' + NEWSDATA_KEY + '&language=en&category=' + category + '&size=12';
-
+ var url = q
+    ? 'https://newsdata.io/api/1/news?apikey=' + NEWSDATA_KEY + '&language=en&q=' + encodeURIComponent(q)
+    : 'https://newsdata.io/api/1/news?apikey=' + NEWSDATA_KEY + '&language=en&category=' + category;
   try {
     var response = await fetch(url);
     var data = await response.json();
