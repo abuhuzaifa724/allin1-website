@@ -54,12 +54,11 @@ exports.handler = async function(event) {
       };
     }
 
-    return {
-      statusCode: 200,
-      headers: headers,
-      body: JSON.stringify({ articles: [], source: 'none' })
-    };
-
+  return {
+  statusCode: 200,
+  headers: headers,
+  body: JSON.stringify({ articles: [], source: 'none', debug: data })
+};
   } catch(e) {
     return {
       statusCode: 500,
