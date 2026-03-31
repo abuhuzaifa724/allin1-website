@@ -25,7 +25,6 @@ exports.handler = async function(event) {
   }
 
   var NEWSDATA_KEY = 'pub_2546e64b425d418eaf206537d2ca7f77';
-
   var url = q
     ? 'https://newsdata.io/api/1/news?apikey=' + NEWSDATA_KEY + '&language=en&q=' + encodeURIComponent(q) + '&size=12'
     : 'https://newsdata.io/api/1/news?apikey=' + NEWSDATA_KEY + '&language=en&category=' + category + '&size=12';
@@ -58,19 +57,14 @@ exports.handler = async function(event) {
     return {
       statusCode: 200,
       headers: headers,
-      body: JSON.stringify({ articles: [], source: 'none', debug: data.message || '' })
+      body: JSON.stringify({ articles: [], source: 'none' })
     };
 
   } catch(e) {
     return {
       statusCode: 500,
       headers: headers,
-      body: JSON.stringify({ error: e.message, articles: [], source: 'error' })
+      body: JSON.stringify({ error: e.message, articles: [] })
     };
   }
 };
-```
-
-**Commit changes** করো — **২ মিনিট** পরে এই URL চেক করো 👇
-```
-allin1news.netlify.app/.netlify/functions/news?category=general
