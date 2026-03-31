@@ -412,7 +412,6 @@ function listImg(url, cat){
   return '<div class="list-bg" style="width:100px;height:70px;background:'+CAT_BG[cat||'top']+';display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">'+(CAT_ICON[cat||'top'] || '📰')+'</div>';
 }
 
-// ===== FETCH NEWS WITH IMAGE =====
 async function fetchRSS(feedUrl){
   var cat = 'top';
   var catMap = {
@@ -423,25 +422,36 @@ async function fetchRSS(feedUrl){
   for(var key in catMap){
     if(feedUrl.indexOf(key) > -1){ cat = catMap[key]; break; }
   }
+
+  var q = '';
   if(feedUrl.indexOf('search?q=') > -1){
     var qMatch = feedUrl.match(/q=([^&]+)/);
-    if(qMatch){
-      try {
-        var searchUrl = '/.netlify/functions/news?q=' + qMatch[1];
-        var res = await fetch(searchUrl);
-        var data = await res.json();
-        return data.articles || [];
-      } catch(e){ return []; }
-    }
+    if(qMatch) q = qMatch[1];
   }
+
+  var NEWSDATA_KEY = 'pub_2546e64b425d418eaf206537d2ca7f77';
+  var url = q
+    ? 'https://newsdata.io/api/1/news?apikey=' + NEWSDATA_KEY + '&language=en&q=' + q
+    : 'https://newsdata.io/api/1/news?apikey=' + NEWSDATA_KEY + '&language=en&category=' + cat;
+
   try {
-    var apiUrl = '/.netlify/functions/news?category=' + cat;
-    var res = await fetch(apiUrl);
+    var res = await fetch(url);
     var data = await res.json();
-    return data.articles || [];
+    if(data.status !== 'success' || !data.results) return [];
+    return data.results
+      .filter(function(a){ return a.title; })
+      .map(function(a){
+        return {
+          title: a.title,
+          description: a.description || '',
+          url: a.link || '#',
+          urlToImage: a.image_url || null,
+          publishedAt: a.pubDate || '',
+          source: { name: a.source_id || 'NewsData' }
+        };
+      });
   } catch(e){ return []; }
 }
-
 // ===== RENDER FEATURED =====
 function renderFeatured(arts, cat){
   if(!arts.length) return;
