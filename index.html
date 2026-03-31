@@ -361,9 +361,15 @@ function cleanDesc(str){
 
 // ===== GET IMAGE OR GRADIENT BACKGROUND =====
 function featImg(url, cat){
-  if(url){
-    return '<img src="'+url+'" style="width:100%;height:400px;object-fit:cover;display:block" loading="lazy" onerror="this.outerHTML=\'<div class=\\"cat-bg\\" style=\\"width:100%;height:400px;background:'+CAT_BG[cat||\'top\']+';display:flex;align-items:center;justify-content:center;font-size:80px\\">'+(CAT_ICON[cat||'top'] || '📰')+'</div>\'">';
-  }
+ if(url){
+  const cat_key = cat || 'top';
+  const bgColor = CAT_BG[cat_key];
+  const icon = CAT_ICON[cat_key] || '📰';
+  
+  const fallback = `<div class="cat-bg" style="width:100%;height:400px;background:${bgColor};display:flex;align-items:center;justify-content:center;font-size:80px">${icon}</div>`;
+  
+  return `<img src="${url}" style="width:100%;height:400px;object-fit:cover;display:block" loading="lazy" onerror="this.outerHTML=\`${fallback}\`">`;
+}
   return '<div class="cat-bg" style="width:100%;height:400px;background:'+CAT_BG[cat||'top']+';display:flex;align-items:center;justify-content:center;font-size:80px">'+(CAT_ICON[cat||'top'] || '📰')+'</div>';
 }
 
